@@ -1,0 +1,20 @@
+---
+- name: Configure Router for DNS resolving
+  copy:
+    src: ../files/resolv.conf
+    dest: /etc/resolv.conf
+    backup: yes
+  become: yes
+- name: Trust Kubernetes APT key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  become: yes
+- name: Add APT Kubernetes Repository
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+  become: yes
+- name: Install kubeadm
+  apt:
+    name: kubeadm
+    update_cache: yes
+  become: yes

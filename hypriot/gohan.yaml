@@ -1,0 +1,26 @@
+hostname: gohan
+manage_etc_hosts: true
+apt_preserve_sources-list: true
+
+users:
+  - name: nlamot
+    primary-group: users
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users,docker,adm,dialout,audio,plugdev,netdev,video
+    ssh-import-id: None
+    lock_passwd: true
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2LJwyLvqFHgPLHX+k8o2Uxh8N1dRBUulkBWW76xQ+SbTbEmXXmibzJdS/Is7F8GG3y2trYiCUE2yzeopHq+oPP3GT2fhbngIH7F6Um4IcwiYtVtnLEK58B0JUC6kTGZUuhTjFWe7NpGjPnsmSyO9ZIsg2EaXJMn3oYVB+zQebp4hBMvuPRMdlql6dVMUcdnUhNv3jvBR0Oit7mGfLfiDle2QKV2P6WcfAXQpWPZR0JF+ZFbiVxR9TJxGfQy23bv2J7Jv4eZzy7cJN1mpvWNdyyLKZXlceRbythKtkntFZ+GDXZRgjlxngLTJCTn9zMxoOX9eHWwY1XYlfN6aZSS9R Nils.Lamot@CND5252KBJ
+
+# Set the locale of the system
+locale: "en_US.UTF-8"
+
+# Set the timezone
+# Value of 'timezone' must exist in /usr/share/zoneinfo
+timezone: "Europe/Brussels"
+
+# Update apt packages on first boot
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true

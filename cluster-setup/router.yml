@@ -1,0 +1,9 @@
+---
+- name: Prepare router
+  hosts: router
+  roles:
+    - dns
+- name: Configure forwarding
+  hosts: router
+  roles:
+    - forwarding

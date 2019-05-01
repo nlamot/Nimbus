@@ -1,0 +1,47 @@
+- name: Setup host file
+  blockinfile:
+    path: /etc/cloud/templates/hosts.debian.tmpl
+    block: |
+      10.64.91.35     vegeta
+      10.64.91.34     piccolo
+      10.64.91.33     goku
+      10.64.91.32     gohan
+  become: yes
+  register: hosts
+- name: Install dnsmasq
+  apt:
+    name: dnsmasq
+    update_cache: yes
+  become: yes
+  register: dnsmasq
+- name: Configure dhcpcd
+  blockinfile:
+    path: /etc/dhcpcd.conf
+    block: |
+      interface eth1
+      static ip_address=10.64.0.1/12
+      static domain_name_servers=8.8.8.8,8.8.4.4
+      nolink
+  become: yes
+  register: dhcpcd
+- name: Configure dnsmasq
+  copy:
+    src: ../files/dnsmasq.conf
+    dest: /etc/dnsmasq.conf
+    backup: yes
+  become: yes
+  register: dnsmasqconfig
+- name: Startup dnsmasq after dhcpcd is finished
+  blockinfile:
+    path: /etc/init.d/dnsmasq
+    insertbefore: '### BEGIN INIT INFO'
+    block: |
+      # Hack to wait until dhcpcd is ready
+      sleep 20
+  become: yes
+  register: dnsmasqstartup
+- name: Reboot the router for changes to take effect
+  reboot:
+  become: true
+  when: hosts.changed or dnsmasq.changed or dhcpcd.changed or dnsmasqconfig.changed or dnsmasqstartup.changed
+

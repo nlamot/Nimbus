@@ -1,0 +1,16 @@
+---
+- name: Install common parts
+  hosts: cluster
+  roles:
+    - common
+  become: yes
+- name: Setup Master
+  hosts: master
+  roles:
+    - master
+  become: yes
+- name: Setup Workers
+  hosts: workers
+  roles:
+    - worker
+  become: yes

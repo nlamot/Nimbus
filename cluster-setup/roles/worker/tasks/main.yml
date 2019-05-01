@@ -1,0 +1,4 @@
+---
+- name: Join the Kubernetes Cluster
+  shell: kubeadm join --token {{ kubeadm_token }} {{ groups['master'][0] }}:6443  --discovery-token-unsafe-skip-ca-verification  --ignore-preflight-errors=all
+  register: kubeadm_join

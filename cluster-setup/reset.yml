@@ -1,0 +1,5 @@
+---
+- name: Clean up cluster
+  hosts: cluster
+  roles:
+    - clean
