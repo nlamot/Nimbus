@@ -1,4 +1,4 @@
-./.idea
+.idea
 */*.retry
 
 cluster-setup/vault_pass.txt
