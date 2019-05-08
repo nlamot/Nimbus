@@ -1,0 +1,5 @@
+---
+- name: Setup foundations
+  hosts: localhost
+  roles:
+    - foundations

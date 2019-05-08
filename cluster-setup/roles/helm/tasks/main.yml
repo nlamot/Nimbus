@@ -1,0 +1,17 @@
+---
+- name: Check current installed version of Chart
+  shell: helm list --output json {{ name }} | jq ".Releases[0].Chart" | sed -E "s/^\"[^0-9]+(.+)\"$/\1/g"
+  register: current_version
+  changed_when: False
+
+- name: Deploy to cluster
+  shell: helm install -n {{ name }} {{ chart }} --version {{ version }} -f {{ values }} --namespace {{ namespace }}
+  when:
+    - current_version.stdout == ""
+
+- name: Upgrade chart
+  shell: helm upgrade {{ name }} {{ chart }} --version {{ version }} -f {{ values }} --namespace {{ namespace }}
+  when:
+    - current_version.stdout != ""
+    - current_version.stdout != version
+
