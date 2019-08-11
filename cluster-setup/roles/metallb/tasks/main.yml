@@ -1,0 +1,10 @@
+---
+- name: Deploy Metallb to cluster
+  include_role:
+    name: helm
+  vars:
+    name: "metallb"
+    chart: "stable/metallb"
+    version: "0.9.5"
+    values: "roles/metallb/files/values.yml"
+    namespace: "default"

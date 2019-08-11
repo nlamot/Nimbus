@@ -9,3 +9,7 @@ The required dependencies on your workstation to execute these playbooks:
     ```bash
     pip install openshift
     ``
+* jq
+    ```bash
+    brew install jq
+    ```

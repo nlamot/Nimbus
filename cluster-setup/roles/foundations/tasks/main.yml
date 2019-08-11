@@ -7,3 +7,12 @@
 - name: Install helm
   shell: helm init --service-account tiller --tiller-image=jessestuart/tiller
   changed_when: False
+
+- name: Install Metallb
+  include_role:
+    name: metallb
+
+- name: Install Traefik
+  include_role:
+    name: traefik
+

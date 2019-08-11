@@ -1,3 +1,6 @@
+#cloud-config
+# vim: syntax=yaml
+#
 hostname: goku
 manage_etc_hosts: true
 apt_preserve_sources-list: true

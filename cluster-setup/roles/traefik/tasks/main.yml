@@ -1,0 +1,10 @@
+---
+- name: Deploy Traefik on cluster
+  include_role:
+    name: helm
+  vars:
+    name: "traefik"
+    chart: "stable/traefik"
+    version: "1.11.4"
+    values: "roles/traefik/files/values.yml"
+    namespace: "kube-system"

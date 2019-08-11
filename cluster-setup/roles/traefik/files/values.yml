@@ -1,0 +1,12 @@
+image: hypriot/rpi-traefik
+imageTag: v1.3.8
+deploymentStrategy:
+  type: RollingUpdate
+ssl:
+  enabled: true
+  enforced: true
+dashboard:
+  enabled: true
+  domain: dashboard.nimbus.be
+rbac:
+  enabled: true
