@@ -9,7 +9,7 @@
   iptables:
     table: nat
     chain: POSTROUTING
-    out_interface: eth1
+    out_interface: eth0
     jump: MASQUERADE
   become: yes
   register: masquerade
@@ -21,7 +21,7 @@
     jump: ACCEPT
   become: yes
   register: outside
-- name: Configure iptables to forward from outside the cluster (eth1) to inside (eth0)
+- name: Configure iptables to forward from outside the cluster (eth0) to inside (eth1)
   iptables:
     chain: FORWARD
     protocol: tcp
