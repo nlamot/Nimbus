@@ -21,6 +21,16 @@
     jump: ACCEPT
   become: yes
   register: outside
+- name: Forward returning traffic to cluster
+  iptables:
+    chain: FORWARD
+    in_interface: eth0
+    out_interface: eth1
+    jump: ACCEPT
+    match: state
+    ctstate: ESTABLISHED,RELATED
+  become: yes
+  register: returningcluster
 - name: Configure iptables to forward from outside the cluster (eth0) to inside (eth1)
   iptables:
     chain: FORWARD
@@ -73,7 +83,7 @@
     destination: 192.168.178.42
     destination_port: 443
     jump: DNAT
-    to_destination: 10.64.91.32:443
+    to_destination: 10.64.91.40:443
     action: insert
   become: yes
   register: httpsdnat
@@ -82,7 +92,7 @@
     table: nat
     chain: POSTROUTING
     protocol: tcp
-    destination: 10.64.91.32
+    destination: 10.64.91.40
     destination_port: 443
     jump: SNAT
     to_source: 10.64.0.1
@@ -97,7 +107,7 @@
     destination: 192.168.178.42
     destination_port: 80
     jump: DNAT
-    to_destination: 10.64.91.32:80
+    to_destination: 10.64.91.40:80
     action: insert
   become: yes
   register: httpdnat
@@ -106,7 +116,7 @@
     table: nat
     chain: POSTROUTING
     protocol: tcp
-    destination: 10.64.91.32
+    destination: 10.64.91.40
     destination_port: 80
     jump: SNAT
     to_source: 10.64.0.1
@@ -122,9 +132,9 @@
 - name: Save iptables
   shell: iptables-save > /etc/iptables/rules.v4
   become: yes
-  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
+  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
 - name: Reboot the router for changes to take effect
   reboot:
   become: true
-  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
+  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
 

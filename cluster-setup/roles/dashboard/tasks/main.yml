@@ -1,0 +1,10 @@
+---
+- name: Deploy the Kubernetes Dashboard to cluster
+  include_role:
+    name: helm
+  vars:
+    name: "kubernetes-dashboard"
+    chart: "stable/kubernetes-dashboard"
+    version: "1.9.0"
+    values: "roles/dashboard/files/values.yml"
+    namespace: "kube-system"

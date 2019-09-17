@@ -1,5 +1,3 @@
-image: hypriot/rpi-traefik
-imageTag: v1.3.8
 deploymentStrategy:
   type: RollingUpdate
 ssl:
@@ -7,6 +5,13 @@ ssl:
   enforced: true
 dashboard:
   enabled: true
-  domain: dashboard.nimbus.be
+  domain: traefik.nimbus.ddns.me
+  ingress:
+    tls: 
+      - hosts:
+        - traefik.nimbus.ddns.me
+        secretName: traefik-tls
+    annotations:
+      certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
 rbac:
   enabled: true

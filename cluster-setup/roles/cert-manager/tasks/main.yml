@@ -1,0 +1,18 @@
+- name: Install Cert Manager CRDs
+  shell: "kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.9/deploy/manifests/00-crds.yaml"
+
+- name: "Setup Cert Manager helm repo"
+  shell: "helm repo add jetstack https://charts.jetstack.io && helm repo update"
+
+- name: Deploy Cert Manager on cluster
+  include_role:
+    name: helm
+  vars:
+    name: "cert-manager"
+    chart: "jetstack/cert-manager"
+    version: "0.9.1"
+    values: "roles/cert-manager/files/values.yml"
+    namespace: "cert-manager"
+
+- name: Create prod issuer
+  shell: "kubectl apply -f roles/cert-manager/files/prod-issuer.yml"

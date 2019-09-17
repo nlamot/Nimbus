@@ -16,3 +16,6 @@
   include_role:
     name: traefik
 
+- name: Install Cert Manager
+  include_role:
+    name: cert-manager

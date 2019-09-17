@@ -1,0 +1,10 @@
+image:
+  repository: quay.io/jetstack/cert-manager-controller-arm
+
+webhook:
+  image:
+    repository: quay.io/jetstack/cert-manager-webhook-arm
+
+cainjector:
+  image:
+    repository: quay.io/jetstack/cert-manager-cainjector-arm
