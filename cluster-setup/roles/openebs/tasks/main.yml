@@ -1,0 +1,10 @@
+---
+- name: Deploy OpenEBS to cluster
+  include_role:
+    name: helm
+  vars:
+    name: "openebs"
+    chart: "stable/openebs"
+    version: "1.2.1"
+    values: "roles/openebs/files/values.yml"
+    namespace: "openebs"
