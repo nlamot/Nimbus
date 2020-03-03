@@ -34,7 +34,6 @@
 - name: Configure iptables to forward from outside the cluster (eth0) to inside (eth1)
   iptables:
     chain: FORWARD
-    protocol: tcp
     in_interface: eth0
     out_interface: eth1
     jump: ACCEPT
@@ -43,7 +42,6 @@
 - name: Forward returning traffic
   iptables:
     chain: FORWARD
-    protocol: tcp
     in_interface: eth1
     out_interface: eth0
     jump: ACCEPT
@@ -99,6 +97,54 @@
     action: insert
   become: yes
   register: httpssnat
+- name: Configure iptables to map port 53 on the external node port 30053 - DNAT
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    destination: 192.168.178.42
+    destination_port: 53
+    jump: DNAT
+    to_destination: 10.64.91.32:30053
+    action: insert
+  become: yes
+  register: dnsdnat
+- name: Configure iptables to map port 30053 on the external node port 53 - SNAT
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    protocol: tcp
+    destination: 10.64.91.32
+    destination_port: 30053
+    jump: SNAT
+    to_source: 10.64.0.1
+    action: insert
+  become: yes
+  register: dnssnat
+- name: Configure iptables to map port 53 on the external node port 30053 - DNAT
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: udp
+    destination: 192.168.178.42
+    destination_port: 53
+    jump: DNAT
+    to_destination: 10.64.91.32:30053
+    action: insert
+  become: yes
+  register: dnsudpdnat
+- name: Configure iptables to map port 30053 on the external node port 53 - SNAT
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    protocol: udp
+    destination: 10.64.91.32
+    destination_port: 30053
+    jump: SNAT
+    to_source: 10.64.0.1
+    action: insert
+  become: yes
+  register: dnsudpsnat
 - name: Configure iptables to map port 80 on the external node port 80 - DNAT
   iptables:
     table: nat
@@ -132,9 +178,9 @@
 - name: Save iptables
   shell: iptables-save > /etc/iptables/rules.v4
   become: yes
-  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
+  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed or dnsdnat.changed or dnssnat.changed or dnsudpdnat.changed or dnsudpsnat.changed
 - name: Reboot the router for changes to take effect
   reboot:
   become: true
-  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed
+  when: forwarding.changed or masquerade.changed or outside.changed or inside.changed or returningcluster.changed or returning.changed or admindnat.changed or adminsnat.changed or httpsdnat.changed or httpssnat.changed or httpdnat.changed or httpsnat.changed or dnsdnat.changed or dnssnat.changed or dnsudpdnat.changed or dnsudpsnat.changed
 
