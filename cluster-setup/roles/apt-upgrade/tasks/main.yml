@@ -1,0 +1,8 @@
+- name: Safe Upgrade apt
+  apt:
+    upgrade: safe
+    update_cache: yes
+  become: yes
+- name: Reboot the node after the upgrade
+  reboot:
+  become: true

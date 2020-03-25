@@ -1,0 +1,10 @@
+---
+- name: Upgrade Router
+  hosts: gogeta
+  roles:
+    - apt-upgrade
+- name: Upgrade cluster nodes
+  hosts: cluster
+  roles:
+    - apt-upgrade
+    
