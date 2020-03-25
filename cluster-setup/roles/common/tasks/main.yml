@@ -15,15 +15,10 @@
   become: yes
 - name: Install kubeadm
   apt:
-    name: kubeadm
+    name: kubeadm={{ kubeadm_version }}
     update_cache: yes
   become: yes
 - name: Install open-iscsi
-  apt:
-    name: open-iscsi
-    update_cache: yes
-  become: yes
-- name: Enable open-iscsi for openebs
   apt:
     name: open-iscsi
     update_cache: yes
